@@ -17,10 +17,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
 
     private final Context context;
-    private final MovieDbResponse.MovieDb[] filmes;
+    private final MovieDb[] filmes;
     private FilmeOnClickListener listener;
 
-    public MovieAdapter(Context context, MovieDbResponse.MovieDb[] filmes, FilmeOnClickListener listener) {
+    public MovieAdapter(Context context, MovieDb[] filmes, FilmeOnClickListener listener) {
         this.context = context;
         this.filmes = filmes;
         this.listener = listener;
@@ -36,7 +36,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        MovieDbResponse.MovieDb filme = filmes[(position)];
+        MovieDb filme = filmes[(position)];
         holder.tvTitulo.setText(filme.getTitle());
         Picasso.with(context).load(String.format("https://image.tmdb.org/t/p/w500%s", filme.getPoster_path())).into(holder.ivPoster);
     }
