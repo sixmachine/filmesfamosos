@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_the_movie">0ce8f1033d6adc7627f96b9841686205</string>
+    <string name="link_top_rated">http://api.themoviedb.org/3/movie/top_rated?</string>
+    <string name="link_popular">http://api.themoviedb.org/3/movie/popular?</string>
+</resources>
