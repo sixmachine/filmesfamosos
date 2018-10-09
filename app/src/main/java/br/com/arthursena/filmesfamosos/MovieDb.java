@@ -29,6 +29,7 @@ public class MovieDb implements Parcelable {
         popularity = in.readDouble();
         poster_path = in.readString();
         overview = in.readString();
+        vote_average = in.readDouble();
         release_date = new Date(in.readLong());
     }
 
@@ -46,6 +47,7 @@ public class MovieDb implements Parcelable {
         dest.writeDouble(popularity);
         dest.writeString(poster_path);
         dest.writeString(overview);
+        dest.writeDouble(vote_average);
         dest.writeLong(release_date.getTime());
     }
 

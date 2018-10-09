@@ -1,6 +1,7 @@
 package br.com.arthursena.filmesfamosos;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +17,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements RecyclerView.OnClickListener {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickListener {
 
     private MovieAdapter adapter;
     private RecyclerView recyclerView;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerView.OnCl
         recyclerView = findViewById(R.id.rv_movies);
         progressBar = findViewById(R.id.pb_loading_indicator);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         progressBar.setVisibility(View.VISIBLE);
@@ -40,6 +41,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerView.OnCl
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onClickFilme(MovieDb filme) {
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra("filme", filme);
+        startActivity(intent);
     }
 
     public class MovieDbAsyncTask extends AsyncTask<URL, Void, MovieDbResponse> {
@@ -58,15 +66,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerView.OnCl
 
         @Override
         protected void onPostExecute(MovieDbResponse response) {
-            adapter = new MovieAdapter(MainActivity.this, response.getResults(), null);
+            adapter = new MovieAdapter(MainActivity.this, response.getResults(), MainActivity.this);
             recyclerView.setAdapter(adapter);
             progressBar.setVisibility(View.INVISIBLE);
             super.onPostExecute(response);
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 }

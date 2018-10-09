@@ -18,9 +18,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     private final Context context;
     private final MovieDb[] filmes;
-    private FilmeOnClickListener listener;
+    private MovieClickListener listener;
 
-    public MovieAdapter(Context context, MovieDb[] filmes, FilmeOnClickListener listener) {
+    public MovieAdapter(Context context, MovieDb[] filmes, MovieClickListener listener) {
         this.context = context;
         this.filmes = filmes;
         this.listener = listener;
@@ -46,8 +46,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         return filmes.length;
     }
 
-    public interface FilmeOnClickListener {
-        void onClickFilme(View view, int indice);
+    public interface MovieClickListener {
+        void onClickFilme(MovieDb filme);
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -59,11 +59,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             super(itemView);
             ivPoster = itemView.findViewById(R.id.ivPoster);
             tvTitulo = itemView.findViewById(R.id.tvTitulo);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-
+            listener.onClickFilme(filmes[getAdapterPosition()]);
         }
     }
 
