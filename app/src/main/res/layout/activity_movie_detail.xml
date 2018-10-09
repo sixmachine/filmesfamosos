@@ -18,6 +18,13 @@
             android:layout_margin="8dp" />
 
         <TextView
+            android:id="@+id/tv_data_lancamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textSize="18sp" />
+
+        <TextView
             android:id="@+id/tv_avaliacao_usuarios"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

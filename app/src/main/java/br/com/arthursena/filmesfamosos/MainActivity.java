@@ -3,10 +3,13 @@ package br.com.arthursena.filmesfamosos;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -22,22 +25,60 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private MovieAdapter adapter;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private String link;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         recyclerView = findViewById(R.id.rv_movies);
         progressBar = findViewById(R.id.pb_loading_indicator);
+
+        if(savedInstanceState == null){
+            link = String.format("%s%s",getString(R.string.link_popular), getString(R.string.api_key));
+        }
+        else {
+            link = savedInstanceState.getString("apiKey");
+        }
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         progressBar.setVisibility(View.VISIBLE);
+        executarBuscaPorFilmes();
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("apiKey", link);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(R.id.menu_melhor_avaliacao == item.getItemId()){
+            link = String.format("%s%s",getString(R.string.link_top_rated), getString(R.string.api_key));
+            executarBuscaPorFilmes();
+            return true;
+        }
+        else if(R.id.menu_popular == item.getItemId()){
+            link = String.format("%s%s",getString(R.string.link_popular), getString(R.string.api_key));
+            executarBuscaPorFilmes();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void executarBuscaPorFilmes(){
         try {
-            new MovieDbAsyncTask().execute(new URL("http://api.themoviedb.org/3/movie/popular?api_key=0ce8f1033d6adc7627f96b9841686205"));
+            new MovieDbAsyncTask().execute(new URL(link));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

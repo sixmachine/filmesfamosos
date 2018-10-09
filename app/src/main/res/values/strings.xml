@@ -1,3 +1,13 @@
 <resources>
+
+    <string name="api_key">0ce8f1033d6adc7627f96b9841686205</string>
+    <string name="link_top_rated">http://api.themoviedb.org/3/movie/top_rated?api_key=</string>
+    <string name="link_popular">http://api.themoviedb.org/3/movie/popular?api_key=</string>
+
     <string name="app_name">Filmes Famosos</string>
+    <string name="mais_popular">Ordernar por mais populares</string>
+    <string name="melhor_avaliacao">Ordernar por melhor avaliação</string>
+    <string name="data_lancamento">Data de lançamento</string>
+    <string name="sinopse">Sinopse</string>
+    <string name="avaliacao_usuarios">Avaliação dos usuários</string>
 </resources>
