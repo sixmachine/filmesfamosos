@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private ProgressBar progressBar;
     private TextView tvErrorMessage;
     private String link;
+    private String apiKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +41,27 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         recyclerView = findViewById(R.id.rv_movies);
         progressBar = findViewById(R.id.pb_loading_indicator);
         tvErrorMessage = findViewById(R.id.tv_error_message_display);
+        apiKey = BuildConfig.API_KEY;
 
         if (savedInstanceState == null) {
-            link = String.format("%s%s", getString(R.string.link_popular), getString(R.string.api_key));
+            link = String.format("%s%s", getString(R.string.link_popular), apiKey);
         } else {
             link = savedInstanceState.getString("apiKey");
         }
-
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        int posterWidth = 500;
+        GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, calculateBestSpanCount(posterWidth));
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         progressBar.setVisibility(View.VISIBLE);
         executarBuscaPorFilmes();
+    }
+
+    private int calculateBestSpanCount(int posterWidth) {
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+        float screenWidth = outMetrics.widthPixels;
+        return Math.round(screenWidth / posterWidth);
     }
 
     @Override
@@ -67,11 +79,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (R.id.menu_melhor_avaliacao == item.getItemId()) {
-            link = String.format("%s%s", getString(R.string.link_top_rated), getString(R.string.api_key));
+            link = String.format("%s%s", getString(R.string.link_top_rated), apiKey);
             executarBuscaPorFilmes();
             return true;
         } else if (R.id.menu_popular == item.getItemId()) {
-            link = String.format("%s%s", getString(R.string.link_popular), getString(R.string.api_key));
+            link = String.format("%s%s", getString(R.string.link_popular), apiKey);
             executarBuscaPorFilmes();
             return true;
         }
@@ -86,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -103,11 +114,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     private Boolean isConnected() {
-        boolean connected = false;
+        boolean connected;
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            //we are connected to a network
             connected = true;
         } else
             connected = false;

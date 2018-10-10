@@ -12,17 +12,17 @@
 
     <TextView
         android:id="@+id/tv_error_message_display"
-        android:textSize="22sp"
+        android:textSize="@dimen/text_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="@dimen/erro_padding"
         android:text="@string/error_message"
         android:visibility="invisible" />
 
     <ProgressBar
         android:id="@+id/pb_loading_indicator"
-        android:layout_height="42dp"
-        android:layout_width="42dp"
+        android:layout_height="@dimen/progress_bar_dimension"
+        android:layout_width="@dimen/progress_bar_dimension"
         android:layout_gravity="center"
         android:visibility="invisible" />
 
