@@ -2,6 +2,8 @@ package br.com.arthursena.filmesfamosos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private MovieAdapter adapter;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private TextView tvErrorMessage;
     private String link;
 
     @Override
@@ -33,11 +37,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.rv_movies);
         progressBar = findViewById(R.id.pb_loading_indicator);
+        tvErrorMessage = findViewById(R.id.tv_error_message_display);
 
-        if(savedInstanceState == null){
-            link = String.format("%s%s",getString(R.string.link_popular), getString(R.string.api_key));
-        }
-        else {
+        if (savedInstanceState == null) {
+            link = String.format("%s%s", getString(R.string.link_popular), getString(R.string.api_key));
+        } else {
             link = savedInstanceState.getString("apiKey");
         }
 
@@ -62,13 +66,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(R.id.menu_melhor_avaliacao == item.getItemId()){
-            link = String.format("%s%s",getString(R.string.link_top_rated), getString(R.string.api_key));
+        if (R.id.menu_melhor_avaliacao == item.getItemId()) {
+            link = String.format("%s%s", getString(R.string.link_top_rated), getString(R.string.api_key));
             executarBuscaPorFilmes();
             return true;
-        }
-        else if(R.id.menu_popular == item.getItemId()){
-            link = String.format("%s%s",getString(R.string.link_popular), getString(R.string.api_key));
+        } else if (R.id.menu_popular == item.getItemId()) {
+            link = String.format("%s%s", getString(R.string.link_popular), getString(R.string.api_key));
             executarBuscaPorFilmes();
             return true;
         }
@@ -76,12 +79,40 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         return super.onOptionsItemSelected(item);
     }
 
-    private void executarBuscaPorFilmes(){
-        try {
-            new MovieDbAsyncTask().execute(new URL(link));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+    private void executarBuscaPorFilmes() {
+        if (!exibirMessagemErro()) {
+            try {
+                new MovieDbAsyncTask().execute(new URL(link));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
         }
+    }
+
+    private boolean exibirMessagemErro() {
+        if (!isConnected()) {
+            tvErrorMessage.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+            return true;
+        }
+
+        tvErrorMessage.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        return false;
+    }
+
+    private Boolean isConnected() {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        } else
+            connected = false;
+
+        return connected;
     }
 
     @Override

@@ -10,4 +10,5 @@
     <string name="data_lancamento">Data de lançamento</string>
     <string name="sinopse">Sinopse</string>
     <string name="avaliacao_usuarios">Avaliação dos usuários</string>
+    <string name="error_message">Sem conexão com a internet.</string>
 </resources>
