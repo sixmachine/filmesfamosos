@@ -12,6 +12,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView tvSinopse;
     private TextView tvAvaliacaoUsuarios;
     private TextView tvDataLancamento;
+    private TextView tvTitulo;
     private ImageView imageView;
 
     @Override
@@ -25,6 +26,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         tvSinopse = findViewById(R.id.tv_sinopse);
         tvSinopse.setText(String.format("%s: %s", getString(R.string.sinopse), filme.getOverview()));
+
+        tvTitulo = findViewById(R.id.tv_titulo_detalhe);
+        tvTitulo.setText(String.format("%s: %s", getString(R.string.titulo), filme.getTitle()));
 
         tvDataLancamento = findViewById(R.id.tv_data_lancamento);
         tvDataLancamento.setText(String.format("%s: %s", getString(R.string.data_lancamento), DateUtil.formatarData(filme.getRelease_date())));

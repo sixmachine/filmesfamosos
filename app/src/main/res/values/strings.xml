@@ -11,4 +11,5 @@
     <string name="sinopse">Sinopse</string>
     <string name="avaliacao_usuarios">Avaliação dos usuários</string>
     <string name="error_message">Sem conexão com a internet.</string>
+    <string name="titulo">Título</string>
 </resources>
