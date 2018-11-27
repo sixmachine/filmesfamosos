@@ -1,4 +1,4 @@
-package br.com.arthursena.filmesfamosos;
+package br.com.arthursena.filmesfamosos.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,6 +6,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import br.com.arthursena.filmesfamosos.R;
+import br.com.arthursena.filmesfamosos.model.MovieDb;
+import br.com.arthursena.filmesfamosos.util.DateUtil;
 
 public class MovieDetailActivity extends AppCompatActivity {
 

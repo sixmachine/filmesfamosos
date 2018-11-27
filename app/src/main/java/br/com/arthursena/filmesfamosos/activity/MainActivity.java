@@ -1,11 +1,10 @@
-package br.com.arthursena.filmesfamosos;
+package br.com.arthursena.filmesfamosos.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,6 +23,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import br.com.arthursena.filmesfamosos.BuildConfig;
+import br.com.arthursena.filmesfamosos.adapter.MovieAdapter;
+import br.com.arthursena.filmesfamosos.model.MovieDbResponse;
+import br.com.arthursena.filmesfamosos.R;
+import br.com.arthursena.filmesfamosos.model.MovieDb;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickListener {
 

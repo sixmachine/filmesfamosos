@@ -1,4 +1,4 @@
-package br.com.arthursena.filmesfamosos;
+package br.com.arthursena.filmesfamosos.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,7 +11,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import br.com.arthursena.filmesfamosos.R;
+import br.com.arthursena.filmesfamosos.model.MovieDb;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 

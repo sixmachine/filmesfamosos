@@ -1,4 +1,4 @@
-package br.com.arthursena.filmesfamosos;
+package br.com.arthursena.filmesfamosos.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

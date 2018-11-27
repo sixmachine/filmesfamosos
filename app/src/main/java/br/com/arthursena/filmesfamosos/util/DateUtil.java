@@ -1,4 +1,4 @@
-package br.com.arthursena.filmesfamosos;
+package br.com.arthursena.filmesfamosos.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

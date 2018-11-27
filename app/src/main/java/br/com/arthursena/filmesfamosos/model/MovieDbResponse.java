@@ -1,4 +1,6 @@
-package br.com.arthursena.filmesfamosos;
+package br.com.arthursena.filmesfamosos.model;
+
+import br.com.arthursena.filmesfamosos.model.MovieDb;
 
 public class MovieDbResponse {
 
