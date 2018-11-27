@@ -20,20 +20,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 "create table " + MovieContract.MovieEntry.TABLE_NAME + " ("
                         + MovieContract.MovieEntry._ID + " integer primary key autoincrement, "
                         + MovieContract.MovieEntry.MOVIE_ID + " integer , "
-                        + MovieContract.MovieEntry.MOVIE_ADULT + " integer default 0 , "
-                        + MovieContract.MovieEntry.MOVIE_POSTER_PATH + " text , "
-                        + MovieContract.MovieEntry.MOVIE_OVERVIEW + " text , "
-                        + MovieContract.MovieEntry.MOVIE_GENRES + " text , "
-                        + MovieContract.MovieEntry.MOVIE_RELEASE_DATE + " text , "
-                        + MovieContract.MovieEntry.MOVIE_TITLE + " text , "
-                        + MovieContract.MovieEntry.MOVIE_ORIGINAL_TITLE + " text , "
-                        + MovieContract.MovieEntry.MOVIE_LANGUAGE + " text , "
-                        + MovieContract.MovieEntry.MOVIE_BACKDROP_PATH + " text , "
-                        + MovieContract.MovieEntry.MOVIE_POPULARITY + " text , "
-                        + MovieContract.MovieEntry.MOVIE_VIDEO + " integer default 0 , "
-                        + MovieContract.MovieEntry.MOVIE_VOTE_AVERAGE + " text , "
-                        + MovieContract.MovieEntry.MOVIE_VOTE_COUNT + " integer ) ; ";
-
+                        + MovieContract.MovieEntry.MOVIE_TITLE + " text "
+                        + " ) ; ";
         db.execSQL(SQL_CREATE_MOVIES_TABLE);
 
     }
