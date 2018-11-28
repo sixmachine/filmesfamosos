@@ -11,4 +11,9 @@
         android:title="@string/melhor_avaliacao"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/menu_favoritos"
+        android:title="@string/exibir_filmes_favoritos"
+        app:showAsAction="never" />
+
 </menu>

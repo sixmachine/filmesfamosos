@@ -2,14 +2,21 @@ package br.com.arthursena.filmesfamosos.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,18 +33,25 @@ import java.net.URL;
 
 import br.com.arthursena.filmesfamosos.BuildConfig;
 import br.com.arthursena.filmesfamosos.R;
+import br.com.arthursena.filmesfamosos.adapter.AbstractMovieAdapter;
 import br.com.arthursena.filmesfamosos.adapter.MovieAdapter;
+import br.com.arthursena.filmesfamosos.adapter.MovieCursorAdapter;
+import br.com.arthursena.filmesfamosos.database.MovieContract;
 import br.com.arthursena.filmesfamosos.model.MovieDb;
 import br.com.arthursena.filmesfamosos.model.MovieDbResponse;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickListener {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickListener, LoaderManager.LoaderCallbacks<Cursor>{
 
-    private MovieAdapter adapter;
+    private static final int MOVIE_LOADER_ID = 0;
     private RecyclerView recyclerView;
+    private MovieCursorAdapter cursorAdapter;
+    private MovieAdapter adapter;
     private ProgressBar progressBar;
     private TextView tvErrorMessage;
     private String link;
     private String apiKey;
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +104,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         } else if (R.id.menu_popular == item.getItemId()) {
             link = String.format("%s%s", getString(R.string.link_popular), apiKey);
             executarBuscaPorFilmes();
+            return true;
+        }
+        else if(R.id.menu_favoritos == item.getItemId()){
+            if(cursorAdapter == null){
+                cursorAdapter = new MovieCursorAdapter(this,this);
+            }
+            getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, null, this);
             return true;
         }
 
@@ -153,10 +174,82 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         @Override
         protected void onPostExecute(MovieDbResponse response) {
-            adapter = new MovieAdapter(MainActivity.this, response.getResults(), MainActivity.this);
+            AbstractMovieAdapter adapter = new MovieAdapter(MainActivity.this, response.getResults(), MainActivity.this);
             recyclerView.setAdapter(adapter);
             progressBar.setVisibility(View.INVISIBLE);
             super.onPostExecute(response);
+        }
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
+        return new AsyncTaskLoader<Cursor>(this) {
+
+            // Initialize a Cursor, this will hold all the task data
+            Cursor mTaskData = null;
+
+            // onStartLoading() is called when a loader first starts loading data
+            @Override
+            protected void onStartLoading() {
+                if (mTaskData != null) {
+                    // Delivers any previously loaded data immediately
+                    deliverResult(mTaskData);
+                } else {
+                    // Force a new load
+                    forceLoad();
+                }
+            }
+
+            // loadInBackground() performs asynchronous loading of data
+            @Override
+            public Cursor loadInBackground() {
+                // Will implement to load data
+
+                // COMPLETED (5) Query and load all task data in the background; sort by priority
+                // [Hint] use a try/catch block to catch any errors in loading data
+
+                try {
+                    return getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                            null,
+                            null,
+                            null,
+                            null);
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to asynchronously load data.");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            // deliverResult sends the result of the load, a Cursor, to the registered listener
+            public void deliverResult(Cursor data) {
+                mTaskData = data;
+                super.deliverResult(data);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        cursorAdapter.swapCursor(cursor);
+        recyclerView.setAdapter(cursorAdapter);
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        cursorAdapter.swapCursor(null);
+        recyclerView.setAdapter(cursorAdapter);
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(recyclerView.getAdapter() instanceof MovieCursorAdapter){
+            getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID,null,MainActivity.this);
         }
     }
 }

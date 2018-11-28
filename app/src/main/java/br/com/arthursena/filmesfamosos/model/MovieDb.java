@@ -1,9 +1,13 @@
 package br.com.arthursena.filmesfamosos.model;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Date;
+
+import br.com.arthursena.filmesfamosos.database.MovieContract;
+import br.com.arthursena.filmesfamosos.util.DateUtil;
 
 public class MovieDb implements Parcelable {
 
@@ -132,5 +136,16 @@ public class MovieDb implements Parcelable {
 
     public void setRelease_date(Date release_date) {
         this.release_date = release_date;
+    }
+
+    public ContentValues toContentValues(){
+        ContentValues cv = new ContentValues();
+        cv.put(MovieContract.MovieEntry.MOVIE_ID,getId());
+        cv.put(MovieContract.MovieEntry.MOVIE_TITLE,getTitle());
+        cv.put(MovieContract.MovieEntry.MOVIE_POSTER_PATH,getPoster_path());
+        cv.put(MovieContract.MovieEntry.MOVIE_OVERVIEW,getOverview());
+        cv.put(MovieContract.MovieEntry.MOVIE_RELEASE_DATE,DateUtil.formatarDataSqlite(getRelease_date()));
+        cv.put(MovieContract.MovieEntry.MOVIE_VOTE_AVERAGE,getVote_average());
+        return cv;
     }
 }

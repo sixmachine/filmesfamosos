@@ -21,6 +21,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private CollapsingToolbarLayout collapsingToolbarLayout;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,30 +40,45 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         Picasso.with(MovieDetailsActivity.this).load(String.format("https://image.tmdb.org/t/p/w500%s", filme.getPoster_path())).into(imageView);
 
-        toolbar.setTitle(filme.getTitle());
+        collapsingToolbarLayout.setTitle(filme.getTitle());
+        fab = findViewById(R.id.fab);
+        mudarImagemFavorito(isFilmeFavoritado(Integer.toString(filme.getId())));
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 String mensagem;
 
-                Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null, "movies_id=?", new String[]{Integer.toString(filme.getId())}, null);
-                if(cursor != null && cursor.getCount() == 0){
-                    ContentValues cv = new ContentValues();
-                    cv.put(MovieContract.MovieEntry.MOVIE_ID,filme.getId());
-                    cv.put(MovieContract.MovieEntry.MOVIE_TITLE,filme.getTitle());
-                    getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI,cv);
+                boolean filmeFavoritado = isFilmeFavoritado(Integer.toString(filme.getId()));
+
+                if(!filmeFavoritado){
+                    getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI,filme.toContentValues());
                     mensagem = "Adicionado aos favoritos";
+                    mudarImagemFavorito(true);
                 }
                 else {
                     getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI.buildUpon().appendPath(Integer.toString(filme.getId())).build(),null,null);
                     mensagem = "Removido dos favoritos";
+                    mudarImagemFavorito(false);
                 }
                 Snackbar.make(view, mensagem, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+    }
+
+
+    private boolean isFilmeFavoritado(String id){
+        Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null, "movies_id=?", new String[]{id}, null);
+        return cursor != null && cursor.getCount() > 0;
+    }
+
+    private void mudarImagemFavorito(boolean filmeFavoritado){
+        if(filmeFavoritado){
+            fab.setImageResource(R.drawable.ic_baseline_favorite_24);
+            return;
+        }
+        fab.setImageResource(R.drawable.ic_baseline_favorite_border_24);
     }
 }
