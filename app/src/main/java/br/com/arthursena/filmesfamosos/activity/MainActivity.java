@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -25,10 +25,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import br.com.arthursena.filmesfamosos.BuildConfig;
-import br.com.arthursena.filmesfamosos.adapter.MovieAdapter;
-import br.com.arthursena.filmesfamosos.model.MovieDbResponse;
 import br.com.arthursena.filmesfamosos.R;
+import br.com.arthursena.filmesfamosos.adapter.MovieAdapter;
 import br.com.arthursena.filmesfamosos.model.MovieDb;
+import br.com.arthursena.filmesfamosos.model.MovieDbResponse;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickListener {
 
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onClickFilme(MovieDb filme) {
-        Intent intent = new Intent(this, MovieDetailActivity.class);
+        Intent intent = new Intent(this, MovieDetailsActivity.class);
         intent.putExtra("filme", filme);
         startActivity(intent);
     }

@@ -31,8 +31,13 @@
         </activity>
         <activity
             android:name=".activity.MovieDetailsActivity"
-            android:label="@string/title_activity_movie_details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <provider
+            android:name=".database.MovieContentProvider"
+            android:authorities="br.com.arthursena.filmesfamosos"
+            android:exported="false" />
+
     </application>
 
 </manifest>
