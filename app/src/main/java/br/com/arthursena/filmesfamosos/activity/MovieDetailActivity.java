@@ -1,14 +1,26 @@
 package br.com.arthursena.filmesfamosos.activity;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+
 import br.com.arthursena.filmesfamosos.R;
+import br.com.arthursena.filmesfamosos.adapter.AbstractMovieAdapter;
+import br.com.arthursena.filmesfamosos.adapter.MovieAdapter;
 import br.com.arthursena.filmesfamosos.model.MovieDb;
+import br.com.arthursena.filmesfamosos.model.MovieDbResponse;
+import br.com.arthursena.filmesfamosos.model.ReviewDbResponse;
 import br.com.arthursena.filmesfamosos.util.DateUtil;
 
 public class MovieDetailActivity extends AppCompatActivity {
