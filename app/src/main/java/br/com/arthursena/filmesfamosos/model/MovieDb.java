@@ -18,6 +18,7 @@ public class MovieDb implements Parcelable {
     private String title;
     private double popularity;
     private String poster_path;
+    private String backdrop_path;
     private String overview;
     private Date release_date;
 
@@ -32,6 +33,7 @@ public class MovieDb implements Parcelable {
         title = in.readString();
         popularity = in.readDouble();
         poster_path = in.readString();
+        backdrop_path = in.readString();
         overview = in.readString();
         vote_average = in.readDouble();
         release_date = new Date(in.readLong());
@@ -50,6 +52,7 @@ public class MovieDb implements Parcelable {
         dest.writeString(title);
         dest.writeDouble(popularity);
         dest.writeString(poster_path);
+        dest.writeString(backdrop_path);
         dest.writeString(overview);
         dest.writeDouble(vote_average);
         dest.writeLong(release_date.getTime());
@@ -138,14 +141,23 @@ public class MovieDb implements Parcelable {
         this.release_date = release_date;
     }
 
-    public ContentValues toContentValues(){
+    public String getBackdrop_path() {
+        return backdrop_path;
+    }
+
+    public void setBackdrop_path(String backdrop_path) {
+        this.backdrop_path = backdrop_path;
+    }
+
+    public ContentValues toContentValues() {
         ContentValues cv = new ContentValues();
-        cv.put(MovieContract.MovieEntry.MOVIE_ID,getId());
-        cv.put(MovieContract.MovieEntry.MOVIE_TITLE,getTitle());
-        cv.put(MovieContract.MovieEntry.MOVIE_POSTER_PATH,getPoster_path());
-        cv.put(MovieContract.MovieEntry.MOVIE_OVERVIEW,getOverview());
-        cv.put(MovieContract.MovieEntry.MOVIE_RELEASE_DATE,DateUtil.formatarDataSqlite(getRelease_date()));
-        cv.put(MovieContract.MovieEntry.MOVIE_VOTE_AVERAGE,getVote_average());
+        cv.put(MovieContract.MovieEntry.MOVIE_ID, getId());
+        cv.put(MovieContract.MovieEntry.MOVIE_TITLE, getTitle());
+        cv.put(MovieContract.MovieEntry.MOVIE_POSTER_PATH, getPoster_path());
+        cv.put(MovieContract.MovieEntry.MOVIE_BACKDROP_PATH, getBackdrop_path());
+        cv.put(MovieContract.MovieEntry.MOVIE_OVERVIEW, getOverview());
+        cv.put(MovieContract.MovieEntry.MOVIE_RELEASE_DATE, DateUtil.formatarDataSqlite(getRelease_date()));
+        cv.put(MovieContract.MovieEntry.MOVIE_VOTE_AVERAGE, getVote_average());
         return cv;
     }
 }

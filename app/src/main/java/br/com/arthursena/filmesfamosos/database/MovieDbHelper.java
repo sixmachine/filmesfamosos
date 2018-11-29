@@ -22,6 +22,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                         + MovieContract.MovieEntry.MOVIE_ID + " integer , "
                         + MovieContract.MovieEntry.MOVIE_TITLE + " text ,"
                         + MovieContract.MovieEntry.MOVIE_POSTER_PATH + " text , "
+                        + MovieContract.MovieEntry.MOVIE_BACKDROP_PATH + " text , "
                         + MovieContract.MovieEntry.MOVIE_OVERVIEW + " text , "
                         + MovieContract.MovieEntry.MOVIE_RELEASE_DATE + " text , "
                         + MovieContract.MovieEntry.MOVIE_VOTE_AVERAGE + " text  "
