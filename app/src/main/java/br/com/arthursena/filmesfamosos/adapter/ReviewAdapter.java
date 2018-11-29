@@ -15,10 +15,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
 
     private Context context;
     private final ReviewDb[] reviews;
+    private ReviewClickListener listener;
 
-    public ReviewAdapter(Context context, ReviewDb[] reviews) {
+    public ReviewAdapter(Context context, ReviewDb[] reviews,ReviewClickListener listener) {
         this.context = context;
         this.reviews = reviews;
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,12 +38,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         holder.tvTexto.setText(review.getContent());
     }
 
+    public interface ReviewClickListener {
+        void onReviewClickListener(ReviewDb review);
+    }
+
     @Override
     public int getItemCount() {
         return reviews.length;
     }
 
-    public class ReviewViewHolder extends RecyclerView.ViewHolder {
+    public class ReviewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         protected TextView tvAutor;
         protected TextView tvTexto;
@@ -50,6 +56,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             super(itemView);
             tvTexto = itemView.findViewById(R.id.text_movie_review_content);
             tvAutor = itemView.findViewById(R.id.text_movie_review_author);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onReviewClickListener(reviews[getAdapterPosition()]);
         }
     }
 }

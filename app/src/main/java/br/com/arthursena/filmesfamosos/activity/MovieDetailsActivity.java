@@ -1,7 +1,9 @@
 package br.com.arthursena.filmesfamosos.activity;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -30,9 +32,10 @@ import br.com.arthursena.filmesfamosos.adapter.ReviewAdapter;
 import br.com.arthursena.filmesfamosos.database.MovieContract;
 import br.com.arthursena.filmesfamosos.model.MovieDb;
 import br.com.arthursena.filmesfamosos.model.MovieDbResponse;
+import br.com.arthursena.filmesfamosos.model.ReviewDb;
 import br.com.arthursena.filmesfamosos.model.ReviewDbResponse;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity implements ReviewAdapter.ReviewClickListener {
 
     private ImageView imageView;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -110,6 +113,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
         fab.setImageResource(R.drawable.ic_baseline_favorite_border_24);
     }
 
+    @Override
+    public void onReviewClickListener(ReviewDb review) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(review.getUrl()));
+        startActivity(browserIntent);
+    }
+
     public class ReviewDbAsyncTask extends AsyncTask<URL, Void, ReviewDbResponse> {
 
         @Override
@@ -126,7 +135,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ReviewDbResponse response) {
-            ReviewAdapter adapter = new ReviewAdapter(MovieDetailsActivity.this, response.getResults());
+            ReviewAdapter adapter = new ReviewAdapter(MovieDetailsActivity.this, response.getResults(), MovieDetailsActivity.this);
             rvReviews.setAdapter(adapter);
             super.onPostExecute(response);
         }
